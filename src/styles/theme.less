@@ -1,0 +1,102 @@
+@import "@arco-design/web-vue/dist/arco.css";
+
+:root {
+  --bg-1: #0A0E1A;
+  --bg-2: #10162A;
+  --bg-3: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
+  --text-1: #E8E8ED;
+  --text-2: #9CA3AF;
+  --text-3: #6B7280;
+  --primary: #6366F1;
+  --primary-glow: rgba(99, 102, 241, 0.3);
+  --accent: #EC4899;
+  --accent-glow: rgba(236, 72, 153, 0.2);
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #F43F5E;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg-1);
+  color: var(--text-1);
+  font-family: "PingFang SC", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
+  font-size: 14px;
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top right, var(--primary-glow) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, var(--accent-glow) 0%, transparent 50%),
+    var(--bg-1);
+  background-attachment: fixed;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.glass {
+  background: var(--bg-3);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.tnum {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+// ============ Arco 暗色覆盖 ============
+body[arco-theme="dark"] {
+  --color-bg-1: #0A0E1A;
+  --color-bg-2: #10162A;
+  --color-bg-3: #161B30;
+  --color-bg-4: #1C2238;
+  --color-bg-5: #232940;
+  --color-border-1: rgba(255, 255, 255, 0.06);
+  --color-border-2: rgba(255, 255, 255, 0.08);
+  --color-text-1: #E8E8ED;
+  --color-text-2: #9CA3AF;
+  --color-text-3: #6B7280;
+  --primary-6: 99, 102, 241;
+}
+
+// 全站圆角 / 边距统一
+.arco-card {
+  border-radius: 12px;
+}
+.arco-btn {
+  border-radius: 8px;
+}
+
+// 选中态紫色
+.arco-menu-selected {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: var(--primary) !important;
+  border-radius: 8px;
+}
