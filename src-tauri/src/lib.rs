@@ -19,6 +19,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::get_port,
             commands::save_dialog,
+            commands::read_file_bytes,
+            commands::write_file_bytes,
             commands::quit_app
         ])
         .setup(|app| {

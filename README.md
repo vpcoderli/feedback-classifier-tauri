@@ -8,6 +8,8 @@
 
 依赖：Node 20+、Rust stable、[Bun](https://bun.com) 1.1+。
 
+**Windows 还要装：** Visual Studio 2022 Build Tools（"C++ 桌面开发"工作负载，提供 MSVC 链接器）+ [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)（Win11 自带，Win10 需手动装一次）。
+
 ```bash
 # 1. 安装前端依赖
 npm install

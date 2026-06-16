@@ -3,7 +3,7 @@ import { ref, watch, onMounted, onUnmounted } from "vue";
 import { Card, Button, Select, Option, Switch, Progress, Result, Space, Tag, Message, Spin, Table } from "@arco-design/web-vue";
 import { IconUpload, IconFile, IconRefresh, IconDownload, IconCheckCircleFill } from "@arco-design/web-vue/es/icon";
 import { uploadApi, type ParseResult, type ClassifyTask, type ClassifyResult } from "../api/upload";
-import { onFileDrop, saveDialog, downloadToPath } from "../tauri/ipc";
+import { onFileDrop, saveDialog, downloadToPath, readFileBytes, basename } from "../tauri/ipc";
 import { useBackendStore } from "../stores/backend";
 
 type Stage = "idle" | "parsing" | "ready" | "classifying" | "done" | "error";
@@ -70,11 +70,11 @@ async function ingestFile(f: File) {
 
 async function ingestFromPath(path: string) {
   try {
-    const blob = await (await fetch(`file://${path}`)).blob();
-    const f = new File([blob], path.split("/").pop() || "file.xlsx");
+    const bytes = await readFileBytes(path);
+    const f = new File([bytes], basename(path));
     await ingestFile(f);
-  } catch {
-    Message.warning("拖入文件不支持，请改用点击选择");
+  } catch (e: any) {
+    Message.error("读取失败：" + String(e?.message || e));
   }
 }
 

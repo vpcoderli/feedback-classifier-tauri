@@ -26,6 +26,16 @@ pub async fn save_dialog(app: tauri::AppHandle, default_name: String) -> Result<
 }
 
 #[tauri::command]
+pub async fn read_file_bytes(path: String) -> Result<Vec<u8>, String> {
+    std::fs::read(&path).map_err(|e| format!("读取失败: {}", e))
+}
+
+#[tauri::command]
+pub async fn write_file_bytes(path: String, bytes: Vec<u8>) -> Result<(), String> {
+    std::fs::write(&path, &bytes).map_err(|e| format!("写入失败: {}", e))
+}
+
+#[tauri::command]
 pub fn quit_app(app: tauri::AppHandle, state: State<'_, SidecarState>) {
     crate::sidecar::kill(&state);
     app.exit(0);

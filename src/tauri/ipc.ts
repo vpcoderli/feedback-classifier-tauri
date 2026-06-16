@@ -1,6 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { writeFile } from "@tauri-apps/plugin-fs";
 
 export async function saveDialog(defaultName: string): Promise<string | null> {
   return invoke<string | null>("save_dialog", { defaultName });
@@ -16,7 +15,7 @@ export async function downloadToPath(url: string, savePath: string): Promise<voi
     throw new Error(`下载失败: ${res.status}`);
   }
   const buf = new Uint8Array(await res.arrayBuffer());
-  await writeFile(savePath, buf);
+  await invoke("write_file_bytes", { path: savePath, bytes: Array.from(buf) });
 }
 
 export function onFileDrop(callback: (paths: string[]) => void): () => void {
@@ -29,6 +28,16 @@ export function onFileDrop(callback: (paths: string[]) => void): () => void {
   return () => {
     unlistenPromise.then((fn) => fn());
   };
+}
+
+export async function readFileBytes(path: string): Promise<Uint8Array> {
+  const arr = await invoke<number[]>("read_file_bytes", { path });
+  return new Uint8Array(arr);
+}
+
+export function basename(path: string): string {
+  const norm = path.replace(/\\/g, "/");
+  return norm.substring(norm.lastIndexOf("/") + 1) || "file";
 }
 
 export async function minimizeWindow() {
