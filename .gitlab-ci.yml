@@ -1,0 +1,27 @@
+stages:
+  - build
+
+build-windows:
+  stage: build
+  tags:
+    - windows  # 指定使用注册了 windows 标签的 GitLab Runner
+  before_script:
+    # 清理并拉取侧挂 Express 后端的兄弟仓库
+    # 使用 GitLab CI token 自动鉴权，克隆至同级目录
+    - |
+      if (Test-Path ../feedback-classifier) {
+        Remove-Item -Recurse -Force ../feedback-classifier
+      }
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_NAMESPACE}/feedback-classifier.git ../feedback-classifier
+  script:
+    # 1. 安装前端及侧挂打包依赖
+    - npm install
+    # 2. 编译 Windows 的 sidecar 服务程序
+    - npm run build:sidecar
+    # 3. 执行 Tauri Windows 安装包构建 (NSIS)
+    - npm run tauri build
+  artifacts:
+    name: "feedback-classifier-windows-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - src-tauri/target/release/bundle/nsis/*.exe
+    expire_in: 1 week
