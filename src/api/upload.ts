@@ -67,7 +67,19 @@ export const uploadApi = {
     return del(`/api/upload/history/${id}`);
   },
 
-  downloadUrl(id: string): string {
-    return downloadURL(`/api/upload/download/${id}`);
+  downloadUrl(id: string, columns?: string[]): string {
+    const baseUrl = `/api/upload/download/${id}`;
+    if (columns && columns.length > 0) {
+      return downloadURL(`${baseUrl}?columns=${encodeURIComponent(columns.join(","))}`);
+    }
+    return downloadURL(baseUrl);
+  },
+
+  preview(payload: { sessionId: string; sheetName: string }): Promise<any[]> {
+    return post<any[]>("/api/upload/preview", payload);
+  },
+
+  columns(id: string): Promise<string[]> {
+    return get<string[]>(`/api/upload/columns/${id}`);
   },
 };

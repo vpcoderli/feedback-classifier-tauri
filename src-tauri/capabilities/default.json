@@ -13,6 +13,16 @@
     "core:window:allow-close",
     "core:webview:allow-internal-toggle-devtools",
     "shell:default",
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [
+        {
+          "name": "binaries/feedback-server",
+          "sidecar": true,
+          "args": true
+        }
+      ]
+    },
     "dialog:default",
     "dialog:allow-save",
     "dialog:allow-open",
