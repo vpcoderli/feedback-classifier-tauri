@@ -52,14 +52,16 @@ jobs:
         working-directory: ./feedback-classifier-tauri
         run: npm run build:sidecar
 
-      # 8. 编译并打包 Tauri 安装包
+      # 8. 编译并打包 Tauri 安装包，并重命名为 FeedBack-ClassiFier.exe
       - name: Build Tauri App
         working-directory: ./feedback-classifier-tauri
-        run: npm run tauri build
+        run: |
+          npm run tauri build
+          Move-Item src-tauri/target/release/bundle/nsis/*.exe src-tauri/target/release/bundle/nsis/FeedBack-ClassiFier.exe
 
       # 9. 导出安装包工件 (Artifact) 供下载
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: feedback-classifier-windows
-          path: feedback-classifier-tauri/src-tauri/target/release/bundle/nsis/*.exe
+          name: FeedBack-ClassiFier
+          path: feedback-classifier-tauri/src-tauri/target/release/bundle/nsis/FeedBack-ClassiFier.exe

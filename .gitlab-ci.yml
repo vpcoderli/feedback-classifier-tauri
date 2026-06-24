@@ -20,8 +20,10 @@ build-windows:
     - npm run build:sidecar
     # 3. 执行 Tauri Windows 安装包构建 (NSIS)
     - npm run tauri build
+    # 4. 重命名安装包为 FeedBack-ClassiFier.exe
+    - Move-Item src-tauri/target/release/bundle/nsis/*.exe src-tauri/target/release/bundle/nsis/FeedBack-ClassiFier.exe
   artifacts:
-    name: "feedback-classifier-windows-$CI_COMMIT_SHORT_SHA"
+    name: "FeedBack-ClassiFier-$CI_COMMIT_SHORT_SHA"
     paths:
-      - src-tauri/target/release/bundle/nsis/*.exe
+      - src-tauri/target/release/bundle/nsis/FeedBack-ClassiFier.exe
     expire_in: 1 week
