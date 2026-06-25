@@ -265,7 +265,12 @@ async function handleDownloadConfirm() {
   try {
     const target = await saveDialog(defaultName);
     if (!target) return;
-    const url = uploadApi.downloadUrl(downloadingRecordId.value, exportColumns.value);
+    // 全选时不传 columns 参数，直接下载原始文件（保留所有 sheet）
+    const isAllSelected = exportColumns.value.length === availableExportColumns.value.length;
+    const url = uploadApi.downloadUrl(
+      downloadingRecordId.value,
+      isAllSelected ? undefined : exportColumns.value
+    );
     await downloadToPath(url, target);
     Message.success("已保存");
   } catch (e: any) {
