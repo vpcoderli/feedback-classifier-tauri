@@ -17,7 +17,8 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
 const binariesDir = resolve(projectRoot, "src-tauri/binaries");
-const sidecarSrc = resolve(projectRoot, "../feedback-classifier/server-bundle/entry.js");
+const backendDir = resolve(projectRoot, "../feedback-classifier");
+const sidecarSrc = resolve(backendDir, "server-bundle/entry.js");
 
 if (!existsSync(sidecarSrc)) {
   console.error(`找不到 sidecar 入口：${sidecarSrc}`);
@@ -26,6 +27,20 @@ if (!existsSync(sidecarSrc)) {
 }
 if (!existsSync(binariesDir)) {
   mkdirSync(binariesDir, { recursive: true });
+}
+
+// 自动安装后端依赖以防打包时缺少 node_modules (例如在 CI 环境中)
+console.log("正在安装后端依赖...");
+try {
+  execSync("bun install", { stdio: "inherit", cwd: backendDir });
+} catch (err) {
+  console.warn("使用 bun install 安装后端依赖失败，尝试 npm install...");
+  try {
+    execSync("npm install", { stdio: "inherit", cwd: backendDir });
+  } catch (npmErr) {
+    console.error("安装后端依赖失败：", npmErr);
+    process.exit(1);
+  }
 }
 
 function detectTriple() {
@@ -70,7 +85,7 @@ for (const t of targets) {
     .filter(Boolean)
     .join(" ");
   console.log(`→ ${t.triple}`);
-  execSync(cmd, { stdio: "inherit", cwd: resolve(projectRoot, "../feedback-classifier") });
+  execSync(cmd, { stdio: "inherit", cwd: backendDir });
   console.log(`  ✓ ${out}`);
 }
 
